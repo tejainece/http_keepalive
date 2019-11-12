@@ -1,1 +1,1 @@
-while true; do netstat nt | grep 15000 | grep -v tcp6 | wc -l; sleep 2; done
+while true; do netstat nt | grep 15000 | grep -v tcp6 | grep TIME_WAIT | wc -l; sleep 1; done
