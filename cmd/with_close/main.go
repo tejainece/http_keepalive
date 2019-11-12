@@ -17,8 +17,7 @@ func main() {
 				DualStack: true,
 			}).DialContext,
 			MaxIdleConns:          100,
-			MaxIdleConnsPerHost:   100,	// TRICK1
-			MaxConnsPerHost:       100,	// TRICK2
+			MaxIdleConnsPerHost:   100,	// TRICK!
 			IdleConnTimeout:       90 * time.Second,
 			TLSHandshakeTimeout:   10 * time.Second,
 			ExpectContinueTimeout: 1 * time.Second,
@@ -28,7 +27,8 @@ func main() {
 	go func() {
 		time.Sleep(time.Second * 2)
 		for i := 0; i < 1000; i++ {
-			go lib.RequestClean(&client)
+			go lib.RequestWithoutRead(&client)
+			time.Sleep(time.Millisecond * 10)
 		}
 	}()
 
