@@ -15,7 +15,7 @@ func main() {
 
 	go func() {
 		time.Sleep(time.Second * 2)
-		for i := 0; i < 1000; i++ {
+		for i := 0; i < 30000; i++ {
 			go lib.RequestClean(&client)
 		}
 	}()

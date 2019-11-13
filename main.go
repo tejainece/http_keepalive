@@ -2,27 +2,16 @@ package main
 
 import (
 	"http_keepalive/lib"
-	"net"
 	"net/http"
 	"time"
 )
 
 func main() {
+	myTransport := *http.DefaultTransport.(*http.Transport)
+	myTransport.MaxIdleConnsPerHost = 100 // TRICK!
+	myTransport.MaxConnsPerHost = 100 // TRICKIER!
 	client := http.Client{
-		Transport: &http.Transport{
-			Proxy: http.ProxyFromEnvironment,
-			DialContext: (&net.Dialer{
-				Timeout:   30 * time.Second,
-				KeepAlive: 30 * time.Second,
-				DualStack: true,
-			}).DialContext,
-			MaxIdleConns:          100,
-			MaxIdleConnsPerHost:   100,	// TRICK1
-			MaxConnsPerHost:       100,	// TRICK2
-			IdleConnTimeout:       90 * time.Second,
-			TLSHandshakeTimeout:   10 * time.Second,
-			ExpectContinueTimeout: 1 * time.Second,
-		},
+		Transport: &myTransport,
 	}
 
 	go func() {
